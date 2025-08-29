@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ayaxdd/math/types"
+	"github.com/ayaxdd/math/gen-all-dissections/types"
 )
 
 const (
