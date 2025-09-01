@@ -3,6 +3,13 @@ package root
 import (
 	"fmt"
 	"io"
+	"strings"
+)
+
+const (
+	openBracket  = "{"
+	closeBracket = "},"
+	tab          = "  "
 )
 
 type TSet struct {
@@ -52,23 +59,44 @@ func (s *TSet) Copy() TItem {
 	return cp
 }
 
+var (
+	printLevel = 0
+	oldFlag    = false
+)
+
 func (s *TSet) Print(w io.Writer) {
-	if s == nil {
+	if s == nil || len(s.items) == 0 {
 		fmt.Fprint(w, "{}")
 		return
 	}
 
-	fmt.Fprint(w, "{ ")
-	if len(s.items) == 0 {
-		fmt.Fprint(w, "{}")
+	currTab := strings.Repeat(tab, printLevel)
+	fmt.Fprint(w, currTab+openBracket)
+
+	if printLevel == 0 {
+		oldFlag = true
 	}
-	for i, item := range s.items {
-		item.Print(w)
-		if i < len(s.items)-1 {
-			fmt.Fprint(w, ", ")
+
+	printLevel++
+	flag := false
+
+	for _, item := range s.items {
+		_, isSet := item.(*TSet)
+		flag = isSet
+		if flag && oldFlag {
+			fmt.Fprintln(w)
 		}
+		item.Print(w)
 	}
-	fmt.Fprint(w, " }")
+
+	if flag {
+		fmt.Fprintf(w, currTab+closeBracket+" : %d\n", len(s.items))
+	} else {
+		fmt.Fprintf(w, closeBracket+" : %d\n", len(s.items))
+	}
+
+	oldFlag = flag
+	printLevel--
 }
 
 // func (s *TSet) Add(arg *TSet) {
