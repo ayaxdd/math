@@ -42,7 +42,7 @@ func (n *TItemNum) Copy() root.TItem {
 }
 
 func (n *TItemNum) Print(w io.Writer) {
-	fmt.Fprint(w, " ", n.mData)
+	fmt.Fprint(w, n.mData)
 }
 
 func (n *TItemNum) GetData() int {

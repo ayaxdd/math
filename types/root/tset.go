@@ -8,7 +8,7 @@ import (
 
 const (
 	openBracket  = "{"
-	closeBracket = "},"
+	closeBracket = "}"
 	tab          = "  "
 )
 
@@ -59,10 +59,7 @@ func (s *TSet) Copy() TItem {
 	return cp
 }
 
-var (
-	printLevel = 0
-	oldFlag    = false
-)
+var printLevel = 0
 
 func (s *TSet) Print(w io.Writer) {
 	if s == nil || len(s.items) == 0 {
@@ -73,29 +70,24 @@ func (s *TSet) Print(w io.Writer) {
 	currTab := strings.Repeat(tab, printLevel)
 	fmt.Fprint(w, currTab+openBracket)
 
-	if printLevel == 0 {
-		oldFlag = true
-	}
-
 	printLevel++
 	flag := false
 
 	for _, item := range s.items {
 		_, isSet := item.(*TSet)
 		flag = isSet
-		if flag && oldFlag {
+		if flag {
 			fmt.Fprintln(w)
 		}
 		item.Print(w)
+
 	}
 
 	if flag {
-		fmt.Fprintf(w, currTab+closeBracket+" : %d\n", len(s.items))
+		fmt.Fprintf(w, currTab+closeBracket+": %d\n", len(s.items))
 	} else {
-		fmt.Fprintf(w, closeBracket+" : %d\n", len(s.items))
+		fmt.Fprintf(w, closeBracket+": %d\n", len(s.items))
 	}
-
-	oldFlag = flag
 	printLevel--
 }
 
