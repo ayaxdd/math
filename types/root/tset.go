@@ -73,7 +73,7 @@ func (s *TSet) Print(w io.Writer) {
 	printLevel++
 	flag := false
 
-	for _, item := range s.items {
+	for i, item := range s.items {
 		_, isSet := item.(*TSet)
 		flag = isSet
 		if flag {
@@ -81,6 +81,9 @@ func (s *TSet) Print(w io.Writer) {
 		}
 		item.Print(w)
 
+		if i != len(s.items)-1 {
+			fmt.Fprint(w, " ")
+		}
 	}
 
 	if flag {
