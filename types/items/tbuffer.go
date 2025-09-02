@@ -1,6 +1,7 @@
 package items
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/ayaxdd/math/types/root"
@@ -55,7 +56,10 @@ func (b *TBuffer) Copy() root.TItem {
 }
 
 func (b *TBuffer) Print(w io.Writer) {
-	panic("print not implemented")
+	fmt.Fprintf(w, "BuffCnt=%d\n", len(b.que))
+	for _, item := range b.que {
+		item.Print(w)
+	}
 }
 
 func (b *TBuffer) Put(item root.TItem) {
