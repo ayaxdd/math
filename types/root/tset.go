@@ -81,7 +81,7 @@ func (s *TSet) Print(w io.Writer) {
 		}
 		item.Print(w)
 
-		if i != len(s.items)-1 {
+		if !flag && i != len(s.items)-1 {
 			fmt.Fprint(w, " ")
 		}
 	}
